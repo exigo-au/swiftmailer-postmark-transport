@@ -163,12 +163,17 @@ class Swift_Transport_PostmarkTransport implements \Swift_Transport
 
             foreach ($message->getChildren() as $attachment) {
                 if (is_object($attachment) and $attachment instanceof \Swift_Mime_Attachment) {
-                    $data['Attachments'][] = array(
+                    $newAttachment = [
                         'Name' => $attachment->getFilename(),
                         'Content' => base64_encode($attachment->getBody()),
-                        'ContentType' => $attachment->getContentType(),
-                        'ContentID' => sprintf('cid:%s', $attachment->getId())
-                    );
+                        'ContentType' => $attachment->getContentType()
+                    ];
+
+                    //If this attachment is part of the email content, include its ID.
+                    $cid = 'cid:'.$attachment->getId();
+                    if (stripos($html->getBody(), $cid)) {
+                        $newAttachment['ContentID'] = $cid;
+                    }
                 }
             }
         }
