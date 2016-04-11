@@ -180,6 +180,8 @@ class Swift_Transport_PostmarkTransport implements \Swift_Transport
             $data['Tag'] = $tag;
         }
 
+        $body = isset($data['HtmlBody']) ? $data['HtmlBody'] : '';
+
         if ($message->getChildren()) {
             $data['Attachments'] = array();
 
@@ -193,7 +195,7 @@ class Swift_Transport_PostmarkTransport implements \Swift_Transport
 
                     //If this attachment is part of the email content, include its ID.
                     $cid = 'cid:'.$attachment->getId();
-                    if (stripos($html->getBody(), $cid)) {
+                    if (stripos($body, $cid)) {
                         $newAttachment['ContentID'] = $cid;
                     }
                 }
