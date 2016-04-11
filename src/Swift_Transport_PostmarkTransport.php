@@ -198,6 +198,8 @@ class Swift_Transport_PostmarkTransport implements \Swift_Transport
                     if (stripos($body, $cid)) {
                         $newAttachment['ContentID'] = $cid;
                     }
+
+                    $data['Attachments'][] = $newAttachment;
                 }
             }
         }
